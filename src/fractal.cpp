@@ -28,6 +28,7 @@ SOFTWARE.
 #include<stdio.h>
 #include<stdbool.h>
 #include<math.h>
+//#define DEBP // DEBug Print
 
 bool initialize();
 
@@ -38,19 +39,35 @@ ALLEGRO_DISPLAY *screen = NULL;
 
 const float border = 150.0;
 
-void draw_triangle_from(float side, float x, float y, ALLEGRO_COLOR color){
+void draw_triangle_down_from(float side, float x, float y, ALLEGRO_COLOR color){
+	float tHeight = (side * sqrtf(3) / 2);
+#ifdef DEBP
+	al_draw_rectangle(x, y, x+side, y+tHeight, al_map_rgb(0, 0xFF, 0), 0);
+#endif // DEBP;
 	al_draw_filled_triangle
-		(x, y, x + side, y, x + side / 2.0, y + (side * sqrtf(3) / 2), color);
+		(x, y, x + side, y, x + side / 2.0, y + tHeight, color);
+}
+
+void draw_triangle_up_from(float side, float x, float y, ALLEGRO_COLOR color){
+	float tHeight = (side * sqrtf(3) / 2);
+#ifdef DEBP
+	al_draw_rectangle(x, y, x+side, y+tHeight, al_map_rgb(0, 0xFF, 0), 0);
+#endif // DEBP;
+	al_draw_filled_triangle
+		(x + side / 2.0, y, x, y+tHeight, x + side, y + tHeight, color);
 }
 
 const int STEPS = 4;
 int step_counter = 0;
 
 void koch_snowflake(int steps){
-	// to-do
+	
 }
 
-int main(void){
+int main(int argc, char **argv){
+	//float seconds;
+	//sscanf(argv[1], "%f", &seconds);
+	
 	if(!initialize())
 		return -1;
 	/*	
@@ -64,11 +81,11 @@ int main(void){
 	
 	al_rest(0.5);
 	*/
-	draw_triangle_from(320.0, 160.0, 100.0, al_map_rgb(0xAA, 0x00, 0xFF));
-		
+	draw_triangle_down_from(320.0, 160.0, 150.0, al_map_rgb(255, 255, 255));
+	draw_triangle_up_from(320.0, 160.0, 60.0, al_map_rgb(255, 255, 255));
 	al_flip_display();
 	
-	al_rest(2.0);
+	al_rest(3.0);
 	
 	al_destroy_display(screen);
 	
